@@ -19,5 +19,7 @@ namespace SignalRCore.Models
         {
             base.OnModelCreating(builder);
         }
+
+        public DbSet<Request> RequestDB { get; set; }
     }
 }

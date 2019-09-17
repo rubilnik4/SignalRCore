@@ -13,8 +13,9 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace AngularCoreSignal.AuthControllers
 {
+    [ApiController]
     [Route("[controller]/[action]")]
-    public class AccountController : Controller
+    public class AccountController : ControllerBase
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private RoleManager<IdentityRole> _roleManager;
