@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
+import { AuthGuard } from './guards/auth-guard.service';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -20,11 +21,11 @@ import { RequestComponent } from './request/request.component';
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
-      { path: '', component: RequestComponent, pathMatch: 'full' },
+      { path: '', component: RequestComponent, canActivate: [AuthGuard]},
       { path: 'login', component: LoginComponent},
     ])
   ],
-  providers: [],
+  providers: [AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

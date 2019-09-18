@@ -37,6 +37,8 @@ namespace SignalRCore
                     .AddDefaultTokenProviders();
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default claims
+
+            var key = Encoding.UTF8.GetBytes(Configuration["JwtKey"].ToString());
             services
                 .AddAuthentication(options =>
                 {
@@ -45,18 +47,18 @@ namespace SignalRCore
                     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 
                 })
-                .AddJwtBearer(cfg =>
-                {
-                    cfg.RequireHttpsMetadata = false;
-                    cfg.SaveToken = true;
-                    cfg.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidIssuer = Configuration["JwtIssuer"],
-                        ValidAudience = Configuration["JwtIssuer"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtKey"])),
-                        ClockSkew = TimeSpan.Zero // remove delay of token when expire
-                    };
-                });
+               .AddJwtBearer(x => {
+                   x.RequireHttpsMetadata = false;
+                   x.SaveToken = false;
+                   x.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                   {
+                       ValidateIssuerSigningKey = true,
+                       IssuerSigningKey = new SymmetricSecurityKey(key),
+                       ValidateIssuer = false,
+                       ValidateAudience = false,
+                       ClockSkew = TimeSpan.Zero
+                   };
+               });
 
             services.AddCors(options =>
             {

@@ -13,4 +13,9 @@ export class RequestComponent {
 
   constructor(private router: Router, private http: HttpClient) { }
 
+  onLogout() {
+    localStorage.removeItem('token');
+    this.router.navigate(['/login']);
+  }
 }
+
